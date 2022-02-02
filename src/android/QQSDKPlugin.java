@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -14,7 +15,8 @@ import com.tencent.connect.common.Constants;
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzonePublish;
 import com.tencent.connect.share.QzoneShare;
-import com.tencent.open.GameAppOperation;
+// import com.tencent.open.GameAppOperation;
+// import com.tencent.tauth.BaseUiListener;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -64,6 +66,8 @@ public class QQSDKPlugin extends CordovaPlugin {
     super.pluginInitialize();
     APP_ID = webView.getPreferences().getString(QQ_APP_ID, "");
     mTencent = Tencent.createInstance(APP_ID, this.cordova.getActivity().getApplicationContext());
+    // mTencent.setIsPermissionGranted(false);
+    mTencent.setIsPermissionGranted(true, Build.MODEL);
   }
 
   @Override
@@ -142,21 +146,21 @@ public class QQSDKPlugin extends CordovaPlugin {
         case ShareScene.QQ:
           callbackContext.error("Android 不支持分享文字到 QQ");
           break;
-        case ShareScene.Favorite:
-          params.putInt(GameAppOperation.QQFAV_DATALINE_REQTYPE,
-              GameAppOperation.QQFAV_DATALINE_TYPE_TEXT);
-          params.putString(GameAppOperation.QQFAV_DATALINE_TITLE, getAppName());
-          params.putString(GameAppOperation.QQFAV_DATALINE_DESCRIPTION, text);
-          params.putString(GameAppOperation.QQFAV_DATALINE_APPNAME, getAppName());
-          Runnable favoritesRunnable = new Runnable() {
-            @Override public void run() {
-              mTencent.addToQQFavorites(QQSDKPlugin.this.cordova.getActivity(), params,
-                  addToQQFavoritesListener);
-            }
-          };
-          this.cordova.getActivity().runOnUiThread(favoritesRunnable);
-          this.cordova.setActivityResultCallback(this);
-          break;
+        // case ShareScene.Favorite:
+        //   params.putInt(GameAppOperation.QQFAV_DATALINE_REQTYPE,
+        //       GameAppOperation.QQFAV_DATALINE_TYPE_TEXT);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_TITLE, getAppName());
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_DESCRIPTION, text);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_APPNAME, getAppName());
+        //   Runnable favoritesRunnable = new Runnable() {
+        //     @Override public void run() {
+        //       mTencent.addToQQFavorites(QQSDKPlugin.this.cordova.getActivity(), params,
+        //           addToQQFavoritesListener);
+        //     }
+        //   };
+        //   this.cordova.getActivity().runOnUiThread(favoritesRunnable);
+        //   this.cordova.setActivityResultCallback(this);
+        //   break;
         case ShareScene.QQZone:
           params.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE,
               QzonePublish.PUBLISH_TO_QZONE_TYPE_PUBLISHMOOD);
@@ -207,25 +211,25 @@ public class QQSDKPlugin extends CordovaPlugin {
           this.cordova.getActivity().runOnUiThread(qqRunnable);
           this.cordova.setActivityResultCallback(this);
           break;
-        case ShareScene.Favorite:
-          ArrayList<String> imageUrls = new ArrayList<String>();
-          imageUrls.add(image);
-          params.putInt(GameAppOperation.QQFAV_DATALINE_REQTYPE,
-              GameAppOperation.QQFAV_DATALINE_TYPE_IMAGE_TEXT);
-          params.putString(GameAppOperation.QQFAV_DATALINE_TITLE, title);
-          params.putString(GameAppOperation.QQFAV_DATALINE_DESCRIPTION, description);
-          params.putString(GameAppOperation.QQFAV_DATALINE_IMAGEURL, image);
-          params.putString(GameAppOperation.QQFAV_DATALINE_APPNAME, getAppName());
-          params.putStringArrayList(GameAppOperation.QQFAV_DATALINE_FILEDATA, imageUrls);
-          Runnable favoritesRunnable = new Runnable() {
-            @Override public void run() {
-              mTencent.addToQQFavorites(QQSDKPlugin.this.cordova.getActivity(), params,
-                  addToQQFavoritesListener);
-            }
-          };
-          this.cordova.getActivity().runOnUiThread(favoritesRunnable);
-          this.cordova.setActivityResultCallback(this);
-          break;
+        // case ShareScene.Favorite:
+        //   ArrayList<String> imageUrls = new ArrayList<String>();
+        //   imageUrls.add(image);
+        //   params.putInt(GameAppOperation.QQFAV_DATALINE_REQTYPE,
+        //       GameAppOperation.QQFAV_DATALINE_TYPE_IMAGE_TEXT);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_TITLE, title);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_DESCRIPTION, description);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_IMAGEURL, image);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_APPNAME, getAppName());
+        //   params.putStringArrayList(GameAppOperation.QQFAV_DATALINE_FILEDATA, imageUrls);
+        //   Runnable favoritesRunnable = new Runnable() {
+        //     @Override public void run() {
+        //       mTencent.addToQQFavorites(QQSDKPlugin.this.cordova.getActivity(), params,
+        //           addToQQFavoritesListener);
+        //     }
+        //   };
+        //   this.cordova.getActivity().runOnUiThread(favoritesRunnable);
+        //   this.cordova.setActivityResultCallback(this);
+        //   break;
         case ShareScene.QQZone:
           params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
           params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, image);
@@ -282,24 +286,24 @@ public class QQSDKPlugin extends CordovaPlugin {
           this.cordova.getActivity().runOnUiThread(qqRunnable);
           this.cordova.setActivityResultCallback(this);
           break;
-        case ShareScene.Favorite:
-          image = processImage(image);
-          params.putInt(GameAppOperation.QQFAV_DATALINE_REQTYPE,
-              GameAppOperation.QQFAV_DATALINE_TYPE_DEFAULT);
-          params.putString(GameAppOperation.QQFAV_DATALINE_TITLE, title);
-          params.putString(GameAppOperation.QQFAV_DATALINE_DESCRIPTION, description);
-          params.putString(GameAppOperation.QQFAV_DATALINE_IMAGEURL, image);
-          params.putString(GameAppOperation.QQFAV_DATALINE_URL, url);
-          params.putString(GameAppOperation.QQFAV_DATALINE_APPNAME, getAppName());
-          Runnable favoritesRunnable = new Runnable() {
-            @Override public void run() {
-              mTencent.addToQQFavorites(QQSDKPlugin.this.cordova.getActivity(), params,
-                  addToQQFavoritesListener);
-            }
-          };
-          this.cordova.getActivity().runOnUiThread(favoritesRunnable);
-          this.cordova.setActivityResultCallback(this);
-          break;
+        // case ShareScene.Favorite:
+        //   image = processImage(image);
+        //   params.putInt(GameAppOperation.QQFAV_DATALINE_REQTYPE,
+        //       GameAppOperation.QQFAV_DATALINE_TYPE_DEFAULT);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_TITLE, title);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_DESCRIPTION, description);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_IMAGEURL, image);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_URL, url);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_APPNAME, getAppName());
+        //   Runnable favoritesRunnable = new Runnable() {
+        //     @Override public void run() {
+        //       mTencent.addToQQFavorites(QQSDKPlugin.this.cordova.getActivity(), params,
+        //           addToQQFavoritesListener);
+        //     }
+        //   };
+        //   this.cordova.getActivity().runOnUiThread(favoritesRunnable);
+        //   this.cordova.setActivityResultCallback(this);
+        //   break;
         case ShareScene.QQZone:
           image = processImage(image);
           ArrayList<String> imageUrls = new ArrayList<String>();
@@ -363,25 +367,25 @@ public class QQSDKPlugin extends CordovaPlugin {
           this.cordova.getActivity().runOnUiThread(qqRunnable);
           this.cordova.setActivityResultCallback(this);
           break;
-        case ShareScene.Favorite:
-          image = processImage(image);
-          params.putInt(GameAppOperation.QQFAV_DATALINE_REQTYPE,
-              GameAppOperation.QQFAV_DATALINE_TYPE_DEFAULT);
-          params.putString(GameAppOperation.QQFAV_DATALINE_TITLE, title);
-          params.putString(GameAppOperation.QQFAV_DATALINE_DESCRIPTION, description);
-          params.putString(GameAppOperation.QQFAV_DATALINE_IMAGEURL, image);
-          params.putString(GameAppOperation.QQFAV_DATALINE_URL, url);
-          params.putString(GameAppOperation.QQFAV_DATALINE_APPNAME, getAppName());
-          params.putString(GameAppOperation.QQFAV_DATALINE_AUDIOURL, flashUrl);
-          Runnable favoritesRunnable = new Runnable() {
-            @Override public void run() {
-              mTencent.addToQQFavorites(QQSDKPlugin.this.cordova.getActivity(), params,
-                  addToQQFavoritesListener);
-            }
-          };
-          this.cordova.getActivity().runOnUiThread(favoritesRunnable);
-          this.cordova.setActivityResultCallback(this);
-          break;
+        // case ShareScene.Favorite:
+        //   image = processImage(image);
+        //   params.putInt(GameAppOperation.QQFAV_DATALINE_REQTYPE,
+        //       GameAppOperation.QQFAV_DATALINE_TYPE_DEFAULT);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_TITLE, title);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_DESCRIPTION, description);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_IMAGEURL, image);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_URL, url);
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_APPNAME, getAppName());
+        //   params.putString(GameAppOperation.QQFAV_DATALINE_AUDIOURL, flashUrl);
+        //   Runnable favoritesRunnable = new Runnable() {
+        //     @Override public void run() {
+        //       mTencent.addToQQFavorites(QQSDKPlugin.this.cordova.getActivity(), params,
+        //           addToQQFavoritesListener);
+        //     }
+        //   };
+        //   this.cordova.getActivity().runOnUiThread(favoritesRunnable);
+        //   this.cordova.setActivityResultCallback(this);
+        //   break;
         case ShareScene.QQZone:
           image = processImage(image);
           ArrayList<String> imageUrls = new ArrayList<String>();
@@ -548,6 +552,12 @@ public class QQSDKPlugin extends CordovaPlugin {
    * 登录监听
    */
   IUiListener loginListener = new IUiListener() {
+
+    @Override public void onWarning(int warning) {
+      QQSDKPlugin.this.webView.sendPluginResult(
+          new PluginResult(PluginResult.Status.ERROR, warning),
+          currentCallbackContext.getCallbackId());
+    }
     @Override public void onComplete(Object response) {
       if (null == response) {
         QQSDKPlugin.this.webView.sendPluginResult(
@@ -591,6 +601,12 @@ public class QQSDKPlugin extends CordovaPlugin {
           currentCallbackContext.getCallbackId());
     }
 
+    @Override public void onWarning(int warning) {
+      QQSDKPlugin.this.webView.sendPluginResult(
+          new PluginResult(PluginResult.Status.ERROR, warning),
+          currentCallbackContext.getCallbackId());
+    }
+
     @Override public void onComplete(Object response) {
       QQSDKPlugin.this.webView.sendPluginResult(new PluginResult(PluginResult.Status.OK),
           currentCallbackContext.getCallbackId());
@@ -606,6 +622,12 @@ public class QQSDKPlugin extends CordovaPlugin {
    * QQZONE 分享监听
    */
   IUiListener qZoneShareListener = new IUiListener() {
+
+    @Override public void onWarning(int warning) {
+      QQSDKPlugin.this.webView.sendPluginResult(
+          new PluginResult(PluginResult.Status.ERROR, warning),
+          currentCallbackContext.getCallbackId());
+    }
 
     @Override public void onCancel() {
       QQSDKPlugin.this.webView.sendPluginResult(
@@ -628,6 +650,12 @@ public class QQSDKPlugin extends CordovaPlugin {
    * 添加到QQ收藏监听
    */
   IUiListener addToQQFavoritesListener = new IUiListener() {
+
+    @Override public void onWarning(int warning) {
+      QQSDKPlugin.this.webView.sendPluginResult(
+          new PluginResult(PluginResult.Status.ERROR, warning),
+          currentCallbackContext.getCallbackId());
+    }
     @Override public void onCancel() {
       QQSDKPlugin.this.webView.sendPluginResult(
           new PluginResult(PluginResult.Status.ERROR, QQFAVORITES_CANCEL),
@@ -676,12 +704,5 @@ public class QQSDKPlugin extends CordovaPlugin {
       }
     }
     super.onActivityResult(requestCode, resultCode, intent);
-  }
-
-  @Override public void onDestroy() {
-    super.onDestroy();
-    if (mTencent != null) {
-      mTencent.releaseResource();
-    }
   }
 }

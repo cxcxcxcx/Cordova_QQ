@@ -140,6 +140,11 @@
       <uses-permission android:name="android.permission.INTERNET" />
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
       <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+      <queries>
+        <package android:name="com.tencent.minihd.qq" />
+        <package android:name="com.tencent.mobileqq" />
+        <package android:name="com.tencent.tim" />
+      </queries>
     </config-file>
   <!--QQ webview Auth Activity -->
   <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest/application">
@@ -162,8 +167,9 @@
   </config-file>
   <source-file src="src/android/QQSDKPlugin.java" target-dir="src/me/vanpan/qqsdk" />
   <!--QQ SDK version 3.2.1-->
-  <source-file src="src/android/open_sdk_r5793.jar" target-dir="app/libs/" />
+  <source-file src="src/android/open_sdk_3.5.10.3_r593ae92_lite.jar" target-dir="app/libs/" />
   <source-file src="src/android/mta-sdk-1.6.2.jar" target-dir="app/libs/" />
   <framework src="com.android.support:support-v4:24.1.1+" />
+  <framework src="io.grpc:grpc-okhttp:1.32.2" />
   </platform>
 </plugin>
